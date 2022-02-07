@@ -32,6 +32,21 @@ namespace PartInfoInPAW
 		protected bool InfoUpdated = false;
 		protected bool ShowTWR = true;
 
+		private void Start()
+		{
+			GameEvents.onEditorShipModified.Add(EditorShipModified);
+		}
+
+		private void OnDestroy()
+		{
+			GameEvents.onEditorShipModified.Remove(EditorShipModified);
+		}
+
+		private void EditorShipModified(ShipConstruct construct)
+		{
+			InfoUpdated = false;
+		}
+
 		public void Update()
 		{
 			if (!InfoUpdated && HighLogic.LoadedSceneIsEditor)
