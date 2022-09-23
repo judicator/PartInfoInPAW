@@ -3,18 +3,20 @@
 Very small and simple mod for Kerbal Space Program.
 Mod works in VAB/SPH and adds some useful information about part to right-click menu (PAW menu):
 * part name (basically, part ID);
-* dry mass;
+* part mod (GameData folder name);
+* dry/wet mass;
 * cost;
-* entry cost.
+* entry cost;
+* dry engine TWR ("dry means" TWR is only calculated for this specific part, not craft or stage). Of course, is shown only for engines.
 
-By default, mod only applies itself to engines, but can be added to any parts.
-For engines, more information is displayed:
-* dry engine TWR (thrust / engine mass);
-* formatted string of additional data about engine (the same you can see in part information screen in left panel in VAB/SPH). If part has more than one ModuleEngines (for example, multi-mode engine like RAPIER), information for first two ModuleEngines will be displayed.
+By default, mod adds it's functionality to all in game parts.
+
+For engines, mod also display formatted string of additional data about engine (the same you can see in part information screen in left panel in VAB/SPH). If part has more than one ModuleEngines (for example, multi-mode engine like RAPIER), information for first two ModuleEngines will be displayed.
+
+Lastly, mod adds two buttons to PAW menu, which allows you to copy part name (part ID) or whole part config (in-game part representation in human-readable text) to clipboard.
 
 Actually, one picture can tell more than a thousand words:
-![PartInfoInPAW](https://i.imgur.com/zEcSNql.png)
-
+![PartInfoInPAW](https://i.imgur.com/ucCfDGe.png)
 
 
 ## Dependencies
