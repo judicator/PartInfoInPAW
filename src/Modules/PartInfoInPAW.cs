@@ -1,46 +1,99 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using KSP.Localization;
 
 namespace PartInfoInPAW
 {
 	public class ModulePartInfoInPAW : PartModule
 	{
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Name", groupName = "partInfo", groupDisplayName = "Part info")]
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartName_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public string partName = "";
 
-		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "Copy part name", active = true, groupName = "partInfo", groupDisplayName = "Part info")]
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartMod_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public string partMod = "";
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartDryMass_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public string partMass = "0 kg";
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartCost_Title", guiFormat = "F0", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public float partCost = 0.0f;
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartEntryCost_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public int partEntryCost = 0;
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartEngineTWR_Title", guiFormat = "F3", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public float partTWR = 0.0f;
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_Info_Title", groupName = "engine1Info", groupDisplayName = "#LOC_PartInfoInPAW_Engine1Info_GroupTitle")]
+		public string engine1Info = "";
+
+		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_Info_Title", groupName = "engine2Info", groupDisplayName = "#LOC_PartInfoInPAW_Engine2Info_GroupTitle")]
+		public string engine2Info = "";
+
+		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartName_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public void CopyPartName()
 		{
 			GUIUtility.systemCopyBuffer = partName;
 		}
 
-		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "Copy part CFG node", active = true, groupName = "partInfo", groupDisplayName = "Part info")]
+		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartNode_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public void CopyPartConfigNode()
 		{
 			GUIUtility.systemCopyBuffer = GetConfigNodeText();
 		}
 
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Dry mass", groupName = "partInfo", groupDisplayName = "Part info")]
-		public string partMass = "0 kg";
-
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Cost", guiFormat = "F0", groupName = "partInfo", groupDisplayName = "Part info")]
-		public float partCost = 0.0f;
-
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Entry cost", groupName = "partInfo", groupDisplayName = "Part info")]
-		public int partEntryCost = 0;
-
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Engine TWR", guiFormat = "F3", groupName = "partInfo", groupDisplayName = "Part info")]
-		public float partTWR = 0.0f;
-
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Info", groupName = "engine1Info", groupDisplayName = "Engine #1 info")]
-		public string engine1Info = "";
-
-		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Info", groupName = "engine2Info", groupDisplayName = "Engine #2 info")]
-		public string engine2Info = "";
-
 		protected ModuleEngines engine1;
 		protected ModuleEngines engine2;
+
+		public struct ModWithComplexFoldersStruct
+		{
+			private string ModFolder;
+			private int NestingLevel;
+
+			public ModWithComplexFoldersStruct(string folder, int nestLevel = 2)
+			{
+				ModFolder = folder;
+				NestingLevel = nestLevel;
+			}
+
+			public bool UrlMatches(string url)
+			{
+				return (ModFolder == url.Split('/')[0]);
+			}
+
+			public string BuildModName(string url)
+			{
+				int nestLevel = NestingLevel;
+                string[] folders = url.Split('/');
+				string result = "";
+				if (folders.Length < nestLevel)
+				{
+					nestLevel = folders.Length;
+				}
+				for (int i = 0; i < nestLevel; i++)
+				{
+					if (i > 0)
+					{
+						result += "/" + folders[i];
+					}
+					else
+					{
+						result += folders[i];
+					}
+				}
+				return result;
+			}
+		}
+
+		protected List<ModWithComplexFoldersStruct> ModsWithComplexFoldersStruct = new List<ModWithComplexFoldersStruct>()
+		{
+			new ModWithComplexFoldersStruct("SquadExpansion"),
+			new ModWithComplexFoldersStruct("UmbraSpaceIndustries"),
+			new ModWithComplexFoldersStruct("WildBlueIndustries"),
+			new ModWithComplexFoldersStruct("Bluedog_DB", 3),
+		};
 
 		protected bool InfoUpdated = false;
 		protected bool ShowTWR = true;
@@ -74,6 +127,10 @@ namespace PartInfoInPAW
 			{
 				partName = GetPartName();
 			}
+			if (partMod == "")
+			{
+				partMod = GetPartMod();
+			}
 			ModuleEngines[] engines;
 			MultiModeEngine[] isMultimode;
 			float totalThrust = 0.0f;
@@ -85,13 +142,13 @@ namespace PartInfoInPAW
 			if (Math.Abs(resMass) <= float.Epsilon)
 			{
 				// Dry mass only
-				Fields["partMass"].guiName = "Dry mass";
+				Fields["partMass"].guiName = Localizer.Format("#LOC_PartInfoInPAW_PartDryMass_Title");
 				partMass = FormatMass(dryMass);
 			}
 			else
 			{
 				// Dry mass / wet mass
-				Fields["partMass"].guiName = "Dry / wet mass";
+				Fields["partMass"].guiName = Localizer.Format("#LOC_PartInfoInPAW_PartDryWetMass_Title");
 				partMass = FormatMass(dryMass) + " / " + FormatMass(wetMass);
 			}
 
@@ -147,11 +204,11 @@ namespace PartInfoInPAW
 			string result;
 			if (mass < 1.0f)
 			{
-				result = (mass * 1000.0f).ToString("F0") + " kg";
+				result = (mass * 1000.0f).ToString("F0") + " " + Localizer.Format("#LOC_PartInfoInPAW_Kg_Unit");
 			}
 			else
 			{
-				result = mass.ToString("F3") + " t";
+				result = mass.ToString("F3") + " " + Localizer.Format("#LOC_PartInfoInPAW_T_Unit");
 			}
 			return result;
 		}
@@ -169,6 +226,19 @@ namespace PartInfoInPAW
 				Debug.LogError(String.Format($"[PartInfoInPAW] Couldn't get config value name for part {part.partInfo.name}"));
 			}
 			return pName;
+		}
+
+		private string GetPartMod()
+        {
+			string url = part.partInfo.partUrl;
+			foreach (var mod in ModsWithComplexFoldersStruct)
+            {
+				if (mod.UrlMatches(url))
+                {
+					return "\n" + mod.BuildModName(url);
+                }
+            }
+			return url.Split('/')[0];
 		}
 
 		private string GetConfigNodeText()
@@ -199,10 +269,23 @@ namespace PartInfoInPAW
 			return result;
 		}
 
+		public override string GetInfo()
+		{
+			if (partName == "")
+			{
+				partName = GetPartName();
+			}
+			if (partMod == "")
+			{
+				partMod = GetPartMod();
+			}
+			return Localizer.Format("#LOC_PartInfoInPAW_PartModuleInfo", partName, partMod);
+		}
+
 		[KSPEvent]
-        public void ModuleDataChanged(BaseEventDetails details)
-        {
+		public void ModuleDataChanged(BaseEventDetails details)
+		{
 			InfoUpdated = false;
-        }
+		}
 	}
 }

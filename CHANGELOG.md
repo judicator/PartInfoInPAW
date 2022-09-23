@@ -1,3 +1,8 @@
+0.2.1
+-----
+- Added mod folder parameter to displayed information. For some mods (like Bluedog_DB or USI family) 2 or 3 nested mod folder levels are shown (for example, "Bluedog_DB/Parts_Atlas" instead of just "Bluedog_DB").
+- Localization implemented, added russian localization.
+
 0.2.0
 -----
 - Part mass information now include dry and wet (if part contain any resources) mass.
