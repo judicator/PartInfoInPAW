@@ -66,7 +66,7 @@ namespace PartInfoInPAW
 			public string BuildModName(string url)
 			{
 				int nestLevel = NestingLevel;
-                string[] folders = url.Split('/');
+				string[] folders = url.Split('/');
 				string result = "";
 				if (folders.Length < nestLevel)
 				{
@@ -229,15 +229,15 @@ namespace PartInfoInPAW
 		}
 
 		private string GetPartMod()
-        {
+		{
 			string url = part.partInfo.partUrl;
 			foreach (var mod in ModsWithComplexFoldersStruct)
-            {
+			{
 				if (mod.UrlMatches(url))
-                {
+				{
 					return "\n" + mod.BuildModName(url);
-                }
-            }
+				}
+			}
 			return url.Split('/')[0];
 		}
 
@@ -250,8 +250,6 @@ namespace PartInfoInPAW
 				node = cfg.ToString();
 				if (cfg != null && !cfg.HasValue("name") && (partName != ""))
 				{
-					// node.Replace($"PART{Environment.NewLine}" + "{" + $"{Environment.NewLine}", $"PART{Environment.NewLine}" + "{" + $"{Environment.NewLine}\tname = " + partName + $"{Environment.NewLine}");
-					// node.Replace("PART\n{\n", "PART\n{" + $"\n\tname = {partName}\n");
 					node = ReplaceFirstOccurrence(node, "{", "{" + $"{Environment.NewLine}\tname = {partName}");
 				}
 			}
@@ -275,11 +273,13 @@ namespace PartInfoInPAW
 			{
 				partName = GetPartName();
 			}
-			if (partMod == "")
-			{
-				partMod = GetPartMod();
-			}
-			return Localizer.Format("#LOC_PartInfoInPAW_PartModuleInfo", partName, partMod);
+			string[] urlSegments = part.partInfo.partUrl.Split('/');
+			if (urlSegments.Length > 1)
+            {
+				Array.Resize(ref urlSegments, urlSegments.Length - 1);
+            }
+			string partURL = String.Join("<color=#888888>/</color><br>", urlSegments) + ".cfg";
+			return Localizer.Format("#LOC_PartInfoInPAW_PartModuleInfo", partName, partURL);
 		}
 
 		[KSPEvent]

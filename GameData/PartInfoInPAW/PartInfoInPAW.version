@@ -1,0 +1,31 @@
+{
+	"NAME": "PartInfoInPAW",
+	"URL": "https://raw.githubusercontent.com/judicator/PartInfoInPAW/master/GameData/PartInfoInPAW/PartInfoInPAW.version",
+	"DOWNLOAD": "https://github.com/judicator/PartInfoInPAW/releases",
+	"VERSION":
+	{
+		"MAJOR":0,
+		"MINOR":2,
+		"PATCH":2,
+		"BUILD":0
+	},
+	"KSP_VERSION":
+	{
+		"MAJOR":1,
+		"MINOR":12,
+		"PATCH":4
+	},
+	"KSP_VERSION_MIN":
+	{
+		"MAJOR":1,
+		"MINOR":8,
+		"PATCH":0
+
+	},
+	"KSP_VERSION_MAX":
+	{
+		"MAJOR":1,
+		"MINOR":12,
+		"PATCH":99
+	}
+}

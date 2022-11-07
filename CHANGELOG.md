@@ -1,3 +1,8 @@
+0.2.2
+-----
+- Slightly changed info format in Parts selection window. Now full path to part CFG file is displayed. PAW menu still has only basic mod folder info to avoid clutter.
+- Updated README.
+
 0.2.1
 -----
 - Added mod folder parameter to displayed information. For some mods (like Bluedog_DB or USI family) 2 or 3 nested mod folder levels are shown (for example, "Bluedog_DB/Parts_Atlas" instead of just "Bluedog_DB").
@@ -15,4 +20,4 @@
 
 0.1.0
 -----
-Initial release.
+- Initial release.
