@@ -24,6 +24,7 @@ This feature is more or less identical to [PartInfo mod by linuxgurugamer](https
 
 3. Finally, mod adds two buttons to PAW menu (see screenshot above), which allows you to copy part name (part ID) or whole part config (in-game part representation in human-readable text) to clipboard.
 This is my favorite feature, and I hope other players and modders will find it useful (as did I).
+NB: **button "Copy part CFG node" copies actual in-game part representation, not text from original part CFG-file. That means, whole PART{} node with all MM-patches already applied to it.**
 
 ## Dependencies
 
