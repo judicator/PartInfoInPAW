@@ -1,8 +1,8 @@
+using KSP.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using KSP.Localization;
 
 namespace PartInfoInPAW
 {
@@ -45,6 +45,7 @@ namespace PartInfoInPAW
 		public void CopyPartName()
 		{
 			GUIUtility.systemCopyBuffer = partName;
+			Debug.Log(String.Format($"[PartInfoInPAW] Part {part.partInfo.name} : ID copied to clipboard"));
 		}
 
 		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartNode_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
@@ -187,7 +188,8 @@ namespace PartInfoInPAW
 						totalThrust += engine2.GetMaxThrust();
 					}
 				}
-				else {
+				else
+				{
 					Fields["engine2Info"].guiActiveEditor = false;
 				}
 			}
@@ -255,10 +257,22 @@ namespace PartInfoInPAW
 			try
 			{
 				ConfigNode cfg = GameDatabase.Instance.GetConfigNode(part.partInfo.partUrl);
-				node = cfg.ToString();
-				if (cfg != null && !cfg.HasValue("name") && (partName != ""))
+				if (cfg == null)
 				{
-					node = ReplaceFirstOccurrence(node, "{", "{" + $"{Environment.NewLine}\tname = {partName}");
+					cfg = part.partInfo.partConfig;
+				}
+				if (cfg != null)
+				{
+					node = cfg.ToString();
+					if (cfg != null && !cfg.HasValue("name") && (partName != ""))
+					{
+						node = ReplaceFirstOccurrence(node, "{", "{" + $"{Environment.NewLine}\tname = {partName}");
+						Debug.Log(String.Format($"[PartInfoInPAW] Part {part.partInfo.name} : CFG node copied to clipboard"));
+					}
+				}
+				else
+				{
+					Debug.LogError(String.Format($"[PartInfoInPAW] Couldn't get config node for part {part.partInfo.name}"));
 				}
 			}
 			catch (Exception)
@@ -277,7 +291,8 @@ namespace PartInfoInPAW
 
 		public override string GetInfo()
 		{
-			if (!showGetInfo) {
+			if (!showGetInfo)
+			{
 				return "";
 			}
 			if (partName == "")
@@ -286,9 +301,9 @@ namespace PartInfoInPAW
 			}
 			string[] urlSegments = part.partInfo.partUrl.Split('/');
 			if (urlSegments.Length > 1)
-            {
+			{
 				Array.Resize(ref urlSegments, urlSegments.Length - 1);
-            }
+			}
 			string partURL = String.Join("<color=#a0a0a0>/</color><br>", urlSegments) + ".cfg";
 			return Localizer.Format("#LOC_PartInfoInPAW_PartModuleInfo", partName, partURL);
 		}
