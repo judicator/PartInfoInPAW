@@ -44,8 +44,16 @@ namespace PartInfoInPAW
 		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartName_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public void CopyPartName()
 		{
+			if (partName == "")
+			{
+				partName = GetPartName();
+			}
 			GUIUtility.systemCopyBuffer = partName;
 			Debug.Log(String.Format($"[PartInfoInPAW] Part {part.partInfo.name} : ID copied to clipboard"));
+			ScreenMessages.PostScreenMessage(new ScreenMessage(
+			  Localizer.Format("#LOC_PartInfoInPAW_CopyToClipboardMsg_PartID_Success", partName),
+			  2.0f, ScreenMessageStyle.UPPER_CENTER));
+
 		}
 
 		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartNode_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
@@ -268,16 +276,25 @@ namespace PartInfoInPAW
 					{
 						node = ReplaceFirstOccurrence(node, "{", "{" + $"{Environment.NewLine}\tname = {partName}");
 						Debug.Log(String.Format($"[PartInfoInPAW] Part {part.partInfo.name} : CFG node copied to clipboard"));
+						ScreenMessages.PostScreenMessage(new ScreenMessage(
+						  Localizer.Format("#LOC_PartInfoInPAW_CopyToClipboardMsg_PartCFG_Success", partName),
+						  2.0f, ScreenMessageStyle.UPPER_CENTER));
 					}
 				}
 				else
 				{
 					Debug.LogError(String.Format($"[PartInfoInPAW] Couldn't get config node for part {part.partInfo.name}"));
+					ScreenMessages.PostScreenMessage(new ScreenMessage(
+					  Localizer.Format("#LOC_PartInfoInPAW_CopyToClipboardMsg_PartCFG_Failure", partName),
+					  3.0f, ScreenMessageStyle.UPPER_CENTER));
 				}
 			}
 			catch (Exception)
 			{
 				Debug.LogError(String.Format($"[PartInfoInPAW] Couldn't get config node for part {part.partInfo.name}"));
+				ScreenMessages.PostScreenMessage(new ScreenMessage(
+				  Localizer.Format("#LOC_PartInfoInPAW_CopyToClipboardMsg_PartCFG_Failure", partName),
+				  3.0f, ScreenMessageStyle.UPPER_CENTER));
 			}
 			return node;
 		}
