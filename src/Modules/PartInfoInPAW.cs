@@ -8,6 +8,15 @@ namespace PartInfoInPAW
 {
 	public class ModulePartInfoInPAW : PartModule
 	{
+		[KSPField(isPersistant = true)]
+		public bool showTWR = true;
+
+		[KSPField(isPersistant = true)]
+		public bool showGetInfo = true;
+
+		[KSPField(isPersistant = true)]
+		public bool showCfgPathInPAW = false;
+
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartName_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public string partName = "";
 
@@ -58,7 +67,7 @@ namespace PartInfoInPAW
 				NestingLevel = nestLevel;
 			}
 
-			public bool UrlMatches(string url)
+			public bool URLMatches(string url)
 			{
 				return (ModFolder == url.Split('/')[0]);
 			}
@@ -96,7 +105,6 @@ namespace PartInfoInPAW
 		};
 
 		protected bool InfoUpdated = false;
-		protected bool ShowTWR = true;
 
 		private void Start()
 		{
@@ -158,7 +166,7 @@ namespace PartInfoInPAW
 			engines = part.GetComponents<ModuleEngines>();
 			if (engines.Length <= 0)
 			{
-				ShowTWR = false;
+				showTWR = false;
 				Fields["engine1Info"].guiActiveEditor = false;
 				Fields["engine2Info"].guiActiveEditor = false;
 			}
@@ -183,7 +191,7 @@ namespace PartInfoInPAW
 					Fields["engine2Info"].guiActiveEditor = false;
 				}
 			}
-			if (ShowTWR)
+			if (showTWR)
 			{
 				partTWR = 0.0f;
 				if (wetMass > 0)
@@ -233,7 +241,7 @@ namespace PartInfoInPAW
 			string url = part.partInfo.partUrl;
 			foreach (var mod in ModsWithComplexFoldersStruct)
 			{
-				if (mod.UrlMatches(url))
+				if (mod.URLMatches(url))
 				{
 					return "\n" + mod.BuildModName(url);
 				}
@@ -269,6 +277,9 @@ namespace PartInfoInPAW
 
 		public override string GetInfo()
 		{
+			if (!showGetInfo) {
+				return "";
+			}
 			if (partName == "")
 			{
 				partName = GetPartName();
@@ -278,7 +289,7 @@ namespace PartInfoInPAW
             {
 				Array.Resize(ref urlSegments, urlSegments.Length - 1);
             }
-			string partURL = String.Join("<color=#888888>/</color><br>", urlSegments) + ".cfg";
+			string partURL = String.Join("<color=#a0a0a0>/</color><br>", urlSegments) + ".cfg";
 			return Localizer.Format("#LOC_PartInfoInPAW_PartModuleInfo", partName, partURL);
 		}
 

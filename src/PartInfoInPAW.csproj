@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <Import Project="UserConfigEnv.xml" />
   <ItemGroup>
     <Compile Include="Modules\PartInfoInPAW.cs" />
   </ItemGroup>
@@ -43,26 +44,34 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\KSP 1.8.1\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(KSPManagedDllsPath)\1.8.0\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\KSP 1.8.1\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(KSPManagedDllsPath)\1.8.0\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\KSP 1.8.1 - test\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(KSPManagedDllsPath)\1.8.0\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\KSP 1.8.1\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(KSPManagedDllsPath)\1.8.0\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(KSPManagedDllsPath)\1.8.0\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(KSPDevTestInstallsPath)\1.8.1\GameData\PartInfoInPAW\Plugins\PartInfoInPAW.dll"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(KSPDevTestInstallsPath)\1.9.1\GameData\PartInfoInPAW\Plugins\PartInfoInPAW.dll"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(KSPDevTestInstallsPath)\1.10.1\GameData\PartInfoInPAW\Plugins\PartInfoInPAW.dll"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(KSPDevTestInstallsPath)\1.11.2\GameData\PartInfoInPAW\Plugins\PartInfoInPAW.dll"
+copy /Y "$(TargetDir)$(ProjectName).dll" "$(KSPDevTestInstallsPath)\1.12.5\GameData\PartInfoInPAW\Plugins\PartInfoInPAW.dll"
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
