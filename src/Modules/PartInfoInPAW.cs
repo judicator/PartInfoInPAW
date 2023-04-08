@@ -200,12 +200,12 @@ namespace PartInfoInPAW
 			{
 				engine1 = engines[0];
 				totalThrust = engine1.GetMaxThrust();
-				engine1Info = "<br>" + engine1.GetInfo();
+				engine1Info = engine1.GetInfo();
 				Fields["engine1Info"].guiActiveEditor = true;
 				if (engines.Length > 1)
 				{
 					engine2 = engines[1];
-					engine2Info = "<br>" + engine2.GetInfo();
+					engine2Info = engine2.GetInfo();
 					Fields["engine2Info"].guiActiveEditor = true;
 					isMultimode = part.GetComponents<MultiModeEngine>();
 					if (isMultimode.Length <= 0)
@@ -223,7 +223,7 @@ namespace PartInfoInPAW
 				partTWR = 0.0f;
 				if (wetMass > 0)
 				{
-					partTWR = totalThrust / (wetMass * 9.81f);
+					partTWR = totalThrust / (wetMass * (float)PhysicsGlobals.GravitationalAcceleration);
 				}
 				Fields["partTWR"].guiActiveEditor = true;
 			}
