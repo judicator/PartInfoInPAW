@@ -1,3 +1,9 @@
+0.2.3
+-----
+- Fixed "Copy Part CFG to Clipboard" not working for parts, having spaces in their cfg-file path (for example, Coatl Aerospace mod).
+- Minor UI improvement: buttons "Copy Part ID to Clipboard" and "Copy Part CFG to Clipboard" now generate on-screen messages then pressed.
+- Added part temperature and skin temperature (current/max) to PAW menu, but only for flight scene and if showInfoInFlight is true (see README).
+
 0.2.2
 -----
 - Slightly changed info format in Parts selection window. Now full path to part CFG file is displayed. PAW menu still has only basic mod folder info to avoid clutter.
