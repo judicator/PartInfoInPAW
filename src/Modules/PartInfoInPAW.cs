@@ -15,13 +15,16 @@ namespace PartInfoInPAW
 		public bool showGetInfo = true;
 
 		[KSPField(isPersistant = true)]
-		public bool showCfgPathInPAW = false;
+		public bool showInfoInFlight = false;
 
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartName_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public string partName = "";
 
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartMod_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public string partMod = "";
+
+		[KSPField(isPersistant = false, guiActiveEditor = false, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartCFGPath_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public string partCFGPath = "";
 
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartDryMass_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public string partMass = "0 kg";
@@ -31,6 +34,12 @@ namespace PartInfoInPAW
 
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartEntryCost_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public int partEntryCost = 0;
+
+		[KSPField(isPersistant = false, guiActiveEditor = false, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartTemperature_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public string partTemperature = "";
+
+		[KSPField(isPersistant = false, guiActiveEditor = false, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartSkinTemperature_Title", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
+		public string partSkinTemperature = "";
 
 		[KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "#LOC_PartInfoInPAW_PartEngineTWR_Title", guiFormat = "F3", groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
 		public float partTWR = 0.0f;
@@ -53,7 +62,6 @@ namespace PartInfoInPAW
 			ScreenMessages.PostScreenMessage(new ScreenMessage(
 			  Localizer.Format("#LOC_PartInfoInPAW_CopyToClipboardMsg_PartID_Success", partName),
 			  2.0f, ScreenMessageStyle.UPPER_CENTER));
-
 		}
 
 		[KSPEvent(guiActive = false, guiActiveEditor = true, guiName = "#LOC_PartInfoInPAW_CopyPartNode_Action", active = true, groupName = "partInfo", groupDisplayName = "#LOC_PartInfoInPAW_PartInfo_GroupTitle")]
@@ -118,6 +126,10 @@ namespace PartInfoInPAW
 		private void Start()
 		{
 			GameEvents.onEditorShipModified.Add(EditorShipModified);
+			Fields["partTemperature"].guiActive = showInfoInFlight;
+			Fields["partSkinTemperature"].guiActive = showInfoInFlight;
+			Events["CopyPartName"].guiActive = showInfoInFlight;
+			Events["CopyPartConfigNode"].guiActive = showInfoInFlight;
 		}
 
 		private void OnDestroy()
@@ -135,6 +147,11 @@ namespace PartInfoInPAW
 			if (!InfoUpdated && HighLogic.LoadedSceneIsEditor)
 			{
 				UpdateInfo();
+			}
+			if (showInfoInFlight && HighLogic.LoadedSceneIsFlight)
+			{
+				partTemperature = Math.Round(part.temperature).ToString() + " / " + Math.Round(part.maxTemp).ToString();
+				partSkinTemperature = Math.Round(part.skinTemperature).ToString() + " / " + Math.Round(part.skinMaxTemp).ToString();
 			}
 		}
 
